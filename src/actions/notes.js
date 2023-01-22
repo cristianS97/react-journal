@@ -4,6 +4,7 @@ import { collection, addDoc, setDoc, doc } from "firebase/firestore";
 import Swal from "sweetalert2";
 // Mis importaciones
 import { db } from "../firebase/firebaseConfig";
+import { fileUpload } from "../helpers/fileUpload";
 import { types } from "../types/types";
 
 export const activeNote = (id, note) => ({
@@ -53,7 +54,7 @@ export const startSaveNote = (note) => {
             icon: 'success'
         });
     }
-}
+};
 
 export const refreshNote = (id, note) => ({
     type: types.notesUpdated,
@@ -63,4 +64,14 @@ export const refreshNote = (id, note) => ({
             id, ...note
         }
     }
-})
+});
+
+export const startUploading = (file) => {
+    return async (dispatch, getState) => {
+        const state = getState(state => state);
+        const {active} = state.notes;
+
+        const fileUrl = await fileUpload(file);
+        console.log(fileUrl);
+    }
+}
