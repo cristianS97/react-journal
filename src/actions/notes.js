@@ -1,5 +1,5 @@
 // Firebase
-import { collection, addDoc, setDoc, doc } from "firebase/firestore";
+import { collection, addDoc, setDoc, doc, deleteDoc } from "firebase/firestore";
 // Sweet alert
 import Swal from "sweetalert2";
 // Mis importaciones
@@ -27,8 +27,8 @@ export const startNewNote = () => {
             date: new Date().getTime()
         };
         const docRef = await addDoc(collection(db, `${ uid }/journal/notes`), newNote);
-        dispatch(activeNote(docRef.id, newNote));
         dispatch(refreshNote(docRef.id, newNote));
+        dispatch(activeNote(docRef.id, newNote));
     }
 };
 
@@ -57,14 +57,32 @@ export const startSaveNote = (note) => {
     }
 };
 
-export const refreshNote = (id, note) => ({
+export const refreshNote = (id, note) => {
+    return {
     type: types.notesUpdated,
     payload: {
         id: id,
         note: {
-            id, ...note
+            id: id,
+            ...note
         }
     }
+}
+};
+
+export const deleteNote = () => {
+    return async (dispatch, getState) => {
+        const state = getState(state => state);
+        const { uid } = state.auth;
+        const {active} = state.notes;
+        await deleteDoc(doc(db, `${uid}/journal/notes/${active.id}`));
+        dispatch(deleteNoteStore(active.id));
+    }
+}
+
+export const deleteNoteStore = (id) => ({
+    type: types.notesDelete,
+    payload: id
 });
 
 export const startUploading = (file) => {
@@ -82,7 +100,7 @@ export const startUploading = (file) => {
         delete noteToFirestore.id;
 
         await setDoc(doc(db, `${uid}/journal/notes/${active.id}`), noteToFirestore);
-        // dispatch(refreshNote(active.id, noteToFirestore));
+        dispatch(refreshNote(active.id, noteToFirestore));
         Swal.fire({
             title: 'Saved',
             text: 'Ok',
