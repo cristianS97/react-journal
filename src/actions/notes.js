@@ -19,7 +19,7 @@ export const activeNote = (id, note) => ({
 export const startNewNote = () => {
     return async (dispatch, getState)  => {
         const state = getState();
-        const { uid } = state.auth;
+        const {uid} = state.auth;
         // Creamos nueva nota
         const newNote = {
             title: '',
@@ -29,6 +29,7 @@ export const startNewNote = () => {
         const docRef = await addDoc(collection(db, `${ uid }/journal/notes`), newNote);
         dispatch(refreshNote(docRef.id, newNote));
         dispatch(activeNote(docRef.id, newNote));
+        dispatch(setNotes([...state.notes.notes, {id:docRef.id, ...newNote}]));
     }
 };
 
@@ -57,8 +58,7 @@ export const startSaveNote = (note) => {
     }
 };
 
-export const refreshNote = (id, note) => {
-    return {
+export const refreshNote = (id, note) => ({
     type: types.notesUpdated,
     payload: {
         id: id,
@@ -67,8 +67,7 @@ export const refreshNote = (id, note) => {
             ...note
         }
     }
-}
-};
+});
 
 export const deleteNote = () => {
     return async (dispatch, getState) => {
