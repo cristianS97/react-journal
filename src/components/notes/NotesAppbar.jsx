@@ -17,12 +17,10 @@ export const NotesAppbar = () => {
     }
 
     const handlePictureUpload = () => {
-        // console.log('Click upload');
         document.querySelector('#fileSelector').click();
     }
 
     const handleFileChange = (e) => {
-        // console.log(e);
         const file = e.target.files[0];
         if(file) {
             dispatch(startUploading(file));

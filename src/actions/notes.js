@@ -11,7 +11,6 @@ export const activeNote = (id, note) => ({
     type: types.notesActive,
     payload: {
         id,
-        url:note.url,
         ...note
     }
 });
@@ -92,9 +91,8 @@ export const startUploading = (file) => {
         const fileUrl = await fileUpload(file);
         active.url = fileUrl;
 
-        // dispatch(startSaveNote(active));
-
         const { uid } = state.auth;
+
         const noteToFirestore = {...active};
         delete noteToFirestore.id;
 
@@ -102,7 +100,7 @@ export const startUploading = (file) => {
         dispatch(refreshNote(active.id, noteToFirestore));
         Swal.fire({
             title: 'Saved',
-            text: 'Ok',
+            text: active.title,
             icon: 'success'
         });
     }
