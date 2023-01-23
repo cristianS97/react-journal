@@ -22,7 +22,7 @@ export const NotesAppbar = () => {
     }
 
     const handleFileChange = (e) => {
-        console.log(e);
+        // console.log(e);
         const file = e.target.files[0];
         if(file) {
             dispatch(startUploading(file));

@@ -50,7 +50,7 @@ export const NoteScreen = () => {
                 ></textarea>
                 {values.url &&
                     <div className='notes__image'>
-                        <img src="https://images.immediate.co.uk/production/volatile/sites/25/2020/01/Stargazing-tips-ffe8d19.jpg?quality=90&resize=980,654" alt="Imagen" />
+                        <img src={values.url} alt="Imagen" />
                     </div>
                 }
             </div>
