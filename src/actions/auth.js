@@ -2,6 +2,7 @@
 import { types } from "../types/types";
 import { auth, provider } from "../firebase/firebaseConfig";
 import { startLoading, finishLoading } from "./ui";
+import { notesLogout } from "./notes";
 // firebase
 import { signInWithPopup, createUserWithEmailAndPassword, updateProfile, signInWithEmailAndPassword } from "firebase/auth";
 // Sweet alert
@@ -60,6 +61,7 @@ export const startLogout = () => {
     return async dispatch => {
         await auth.signOut();
         dispatch(logout());
+        dispatch(notesLogout());
     };
 }
 

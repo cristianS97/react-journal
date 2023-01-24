@@ -105,3 +105,7 @@ export const startUploading = (file) => {
         });
     }
 }
+
+export const notesLogout = () => ({
+    type: types.notesLogoutCleaning
+});
